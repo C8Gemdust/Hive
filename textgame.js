@@ -3,7 +3,6 @@ const ctx = canvas.getContext('2d');
 
 let currentScene = 'start';
 let userInput = '';
-let userResponse = '';
 
 document.addEventListener('keydown', handleKeydown);
 
@@ -12,36 +11,38 @@ function handleKeydown(e) {
         processInput();
     } else if (e.key === 'Backspace') {
         userInput = userInput.slice(0, -1);
-        updateCanvas();
     } else if (e.key.length === 1) {
         userInput += e.key;
-        updateCanvas();
     }
+    updateCanvas();
 }
 
 function processInput() {
-    userResponse = userInput.toLowerCase();
+    const response = userInput.toLowerCase().trim();
     userInput = '';
 
     if (currentScene === 'start') {
-        if (userResponse === 'left') {
+        if (response === 'left') {
             currentScene = 'leftPath';
-        } else if (userResponse === 'right') {
+        } else if (response === 'right') {
             currentScene = 'rightPath';
         }
     } else if (currentScene === 'leftPath') {
-        if (userResponse === 'explore') {
+        if (response === 'explore') {
             currentScene = 'exploreCave';
-        } else if (userResponse === 'return') {
+        } else if (response === 'return') {
             currentScene = 'start';
         }
     } else if (currentScene === 'rightPath') {
-        if (userResponse === 'cross') {
+        if (response === 'cross') {
             currentScene = 'crossBridge';
-        } else if (userResponse === 'return') {
+        } else if (response === 'return') {
             currentScene = 'start';
         }
+    } else if (currentScene === 'exploreCave' || currentScene === 'crossBridge') {
+        currentScene = 'start'; // Reset the game
     }
+
     updateCanvas();
 }
 
@@ -60,11 +61,9 @@ function updateCanvas() {
     } else if (currentScene === 'exploreCave') {
         drawText("You explore the cave and find treasure! You win!", 50, 100);
         drawText("Press Enter to restart.", 50, 150);
-        currentScene = 'start'; // Reset the game
     } else if (currentScene === 'crossBridge') {
         drawText("You cross the bridge and fall into a river. Game over.", 50, 100);
         drawText("Press Enter to restart.", 50, 150);
-        currentScene = 'start'; // Reset the game
     }
 
     drawText(`> ${userInput}`, 50, 250);
