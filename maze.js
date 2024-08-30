@@ -1,19 +1,26 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const cellSize = 30; // Size of each maze cell
-const playerSize = 10; // Player's dot size
+// Maze dimensions
+const rows = 10;
+const cols = 10;
+const cellSize = canvas.width / cols; // Calculate cell size based on canvas size
+
+const playerSize = cellSize / 3; // Player's dot size, scaled to the cell size
 let playerX = cellSize / 2;
 let playerY = cellSize / 2;
 
 const maze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+    [1, 0, 0, 0, 1, 0, 0, 1, 0, 1],
+    [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
 function drawMaze() {
@@ -52,7 +59,8 @@ function movePlayer(dx, dy) {
     let col = Math.floor(newX / cellSize);
     let row = Math.floor(newY / cellSize);
 
-    if (maze[row][col] === 0) { // Check for wall collision
+    // Check if the new position is within bounds and not colliding with walls
+    if (col >= 0 && col < cols && row >= 0 && row < rows && maze[row][col] === 0) {
         playerX = newX;
         playerY = newY;
     }
@@ -62,23 +70,22 @@ document.addEventListener('keydown', function(event) {
     switch (event.key) {
         case 'ArrowUp':
         case 'w':
-            movePlayer(0, -cellSize);
+            movePlayer(0, -cellSize / 5); // Move up
             break;
         case 'ArrowDown':
         case 's':
-            movePlayer(0, cellSize);
+            movePlayer(0, cellSize / 5); // Move down
             break;
         case 'ArrowLeft':
         case 'a':
-            movePlayer(-cellSize, 0);
+            movePlayer(-cellSize / 5, 0); // Move left
             break;
         case 'ArrowRight':
         case 'd':
-            movePlayer(cellSize, 0);
+            movePlayer(cellSize / 5, 0); // Move right
             break;
     }
     draw();
 });
 
 draw();
-
