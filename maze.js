@@ -5,9 +5,9 @@ const cols = 20;  // Number of columns in the maze
 const rows = 20;  // Number of rows in the maze
 const cellSize = canvas.width / cols;  // Dynamic cell size based on canvas size
 
-const playerSize = cellSize / 2;  // Player's dot size, scaled to cell size
-let playerX = cellSize / 2;
-let playerY = cellSize / 2;
+const playerSize = cellSize / 3;  // Reduce player's size to better fit the maze cells
+let playerX = cellSize * 1.5;  // Adjust initial player position to the center of the first open cell
+let playerY = cellSize * 1.5;
 
 // A solvable maze
 const maze = [
@@ -69,7 +69,7 @@ function movePlayer(dx, dy) {
     let col = Math.floor(newX / cellSize);
     let row = Math.floor(newY / cellSize);
 
-    // Check if the new position is within bounds and not colliding with walls
+    // Ensure the player stays within bounds and doesn't collide with walls
     if (col >= 0 && col < cols && row >= 0 && row < rows && maze[row][col] === 0) {
         playerX = newX;
         playerY = newY;
