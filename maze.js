@@ -1,31 +1,41 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Maze dimensions
-const rows = 10;
-const cols = 10;
-const cellSize = canvas.width / cols; // Calculate cell size based on canvas size
+const cols = 20;  // Number of columns in the maze
+const rows = 20;  // Number of rows in the maze
+const cellSize = canvas.width / cols;  // Dynamic cell size based on canvas size
 
-const playerSize = cellSize / 3; // Player's dot size, scaled to the cell size
+const playerSize = cellSize / 2;  // Player's dot size, scaled to cell size
 let playerX = cellSize / 2;
 let playerY = cellSize / 2;
 
+// A solvable maze
 const maze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
-    [1, 0, 0, 0, 1, 0, 0, 1, 0, 1],
-    [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
 function drawMaze() {
-    for (let row = 0; row < maze.length; row++) {
-        for (let col = 0; col < maze[row].length; col++) {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
             if (maze[row][col] === 1) {
                 ctx.fillStyle = '#333333'; // Wall color
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
@@ -70,19 +80,19 @@ document.addEventListener('keydown', function(event) {
     switch (event.key) {
         case 'ArrowUp':
         case 'w':
-            movePlayer(0, -cellSize / 5); // Move up
+            movePlayer(0, -cellSize / 4); // Move up
             break;
         case 'ArrowDown':
         case 's':
-            movePlayer(0, cellSize / 5); // Move down
+            movePlayer(0, cellSize / 4); // Move down
             break;
         case 'ArrowLeft':
         case 'a':
-            movePlayer(-cellSize / 5, 0); // Move left
+            movePlayer(-cellSize / 4, 0); // Move left
             break;
         case 'ArrowRight':
         case 'd':
-            movePlayer(cellSize / 5, 0); // Move right
+            movePlayer(cellSize / 4, 0); // Move right
             break;
     }
     draw();
