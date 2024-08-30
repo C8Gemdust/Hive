@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <link rel="icon" type="image/x-icon" href="icon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon Kit checker (Beta)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #weaponSelector {
+            margin-bottom: 20px;
+        }
+        #weaponCanvas {
+            border: 2px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+      <a href="textgame.html">Text game</a>
+    <div>
+        <select id="weaponSelector">
+            <!-- Weapons will be populated by JavaScript -->
+        </select>
+        <canvas id="weaponCanvas" width="400" height="200"></canvas>
+    </div>
+    <script>
+        const weapons = [
+            {
+                name: "Splattershot",
+                subWeapon: "Suction Bomb",
+                specialWeapon: "Trizooka"
+            },
+            {
+                name: "Splat Roller",
+                subWeapon: "Curling Bomb",
+                specialWeapon: "Big Bubbler"
+            },
+            {
+                name: "Splat Charger",
+                subWeapon: "Splat Bomb",
+                specialWeapon: "Ink Vac"
+            },
+            {
+                name: "Splat Dualies",
+                subWeapon: "Suction Bomb",
+                specialWeapon: "Crab Tank"
+            },
+             // New weapons added below
+            {
+                name: "Slosher",
+                subWeapon: "Suction Bomb",
+                specialWeapon: "Triple Inkstrike"
+            },
+            {
+                name: "Blaster",
+                subWeapon: "Autobomb Bomb",
+                specialWeapon: "Big Bubbler"
+            },
+            {
+                name: "Tri-Stringer",
+                subWeapon: "Toxic Mist",
+                specialWeapon: "Killer Wail 5.1"
+            },
+            {
+                name: "Heavy Splatling",
+                subWeapon: "Sprinkler",
+                specialWeapon: "Wavebreaker"
+            },
+            {
+                name: "Splatana Wiper",
+                subWeapon: "Torpedo",
+                specialWeapon: "Ultra Stamp"
+            },
+            {
+                name: "Splat Brella",
+                subWeapon: "Sprinkler",
+                specialWeapon: "Triple Inkstrike"
+            },
+            {
+                name: "Octobrush",
+                subWeapon: "Suction Bomb",
+                specialWeapon: "Zipcaster"
+            },    
+        ];
 
+        const weaponSelector = document.getElementById('weaponSelector');
+        const canvas = document.getElementById('weaponCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Populate the weapon selector dropdown
+        weapons.forEach((weapon, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = weapon.name;
+            weaponSelector.appendChild(option);
+        });
+
+        // Function to draw the selected weapon's kit on the canvas
+        function drawWeaponKit(weapon) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "#000";
+            ctx.fillText(`Weapon: ${weapon.name}`, 20, 50);
+            ctx.fillText(`Sub: ${weapon.subWeapon}`, 20, 100);
+            ctx.fillText(`Special: ${weapon.specialWeapon}`, 20, 150);
+        }
+
+        // Event listener for weapon selection
+        weaponSelector.addEventListener('change', (e) => {
+            const selectedWeapon = weapons[e.target.value];
+            drawWeaponKit(selectedWeapon);
+        });
+
+        // Initialize with the first weapon selected
+        weaponSelector.value = 0;
+        drawWeaponKit(weapons[0]);
+    </script>
+</body>
+</html>
